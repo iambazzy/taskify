@@ -1,0 +1,24 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="10">
+            <item index="0" class="java.lang.String" itemvalue="blinker" />
+            <item index="1" class="java.lang.String" itemvalue="werkzeug" />
+            <item index="2" class="java.lang.String" itemvalue="zipp" />
+            <item index="3" class="java.lang.String" itemvalue="flask" />
+            <item index="4" class="java.lang.String" itemvalue="click" />
+            <item index="5" class="java.lang.String" itemvalue="importlib-metadata" />
+            <item index="6" class="java.lang.String" itemvalue="PyMySQL" />
+            <item index="7" class="java.lang.String" itemvalue="bs4" />
+            <item index="8" class="java.lang.String" itemvalue="et-xmlfile" />
+            <item index="9" class="java.lang.String" itemvalue="openpyxl" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="false" level="WARNING" enabled_by_default="false" />
+  </profile>
+</component>
