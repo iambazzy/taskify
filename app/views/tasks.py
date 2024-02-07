@@ -27,6 +27,18 @@ def create_task(decoded_token):
     except ValidationError as error:
         return build_response(error.messages, 'An error occurred', False), 500
 
+
+@tasks_bp.route('/user_tasks', methods=['GET'])
+@login_required
+def get_tasks(decoded_token):
+    try:
+        task_repo = TaskRepository()
+        user_id = decoded_token["user"]["user_id"]
+        tasks = task_repo.get_user_tasks(user_id)
+        return build_response(tasks, 'Tasks fetched successfully', True), 200
+    except Exception as e:
+        return build_response(e, 'An error occurred', False), 500
+
 # @tasks_bp.route('/', methods=['GET'])
 # @login_required
 # def get_tasks(decoded_token):
