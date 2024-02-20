@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from jwt.exceptions import ExpiredSignatureError, DecodeError, InvalidTokenError
 from datetime import datetime, timedelta
+from db.query_builder import QueryBuilder
 
 
 class User:
@@ -33,9 +34,7 @@ class AuthRepository:
 
     @staticmethod
     def user_exists(email):
-        user_exists_query = f'''
-            SELECT * FROM users WHERE email = '{email}'
-        '''
+        user_exists_query = QueryBuilder.build_select_query('users', f"email = {email}")
         try:
             with db_cursor(True) as cursor:
                 cursor.execute(user_exists_query)
@@ -67,7 +66,7 @@ class AuthRepository:
     @staticmethod
     def token_exists(token):
         # Fetch using token id later on
-        token_get_query = f"SELECT * FROM password_reset_tokens WHERE token = '{token}'"
+        token_get_query = QueryBuilder.build_select_query('password_reset_tokens', f"token = '{token}'")
         try:
             with db_cursor(True) as cursor:
                 cursor.execute(token_get_query)

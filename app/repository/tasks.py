@@ -1,8 +1,9 @@
 from db.database import db_cursor
 from flask import current_app
+from db.query_builder import QueryBuilder
 
 
-class Task:
+class Task(QueryBuilder):
     def __init__(self, title, body, due_date, completed):
         self.title = title
         self.body = body
@@ -28,9 +29,7 @@ class TaskRepository:
 
     @staticmethod
     def get_user_tasks(user_id):
-        task_fetch_query = f'''
-            SELECT * FROM user_tasks WHERE user_id = {user_id}
-        '''
+        task_fetch_query = QueryBuilder.build_select_query('user_tasks', f"user_id = {user_id}")
         try:
             with db_cursor(True) as cursor:
                 cursor.execute(task_fetch_query)
