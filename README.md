@@ -114,3 +114,137 @@ This endpoint allows authenticated users to create a new task.
     "due_date": "2024-02-20",
     "completed": false
 }
+```
+
+### 2. Get Tasks
+
+- **URL:** `/tasks/`
+- **Method:** GET
+- **Authentication Required:** Yes
+
+### Description
+
+This endpoint allows authenticated users to retrieve their tasks.
+
+### Request Headers
+
+- **Authorization:** Bearer token
+
+### Response
+
+- **Status Code:** 
+    - 200: Tasks fetched successfully
+    - 500: An error occurred
+    
+- **Content Type:** `application/json`
+
+#### Successful Response Example
+
+```json
+[
+    {
+        "id": 1,
+        "title": "Task 1",
+        "body": "Task description",
+        "due_date": "2024-02-20",
+        "completed": false
+    },
+    {
+        "id": 2,
+        "title": "Task 2",
+        "body": "Task description",
+        "due_date": "2024-02-21",
+        "completed": true
+    }
+]
+```
+
+### 3. Update Task
+
+- **URL:** `/tasks/update_task/<task_id>`
+- **Method:** PUT
+- **Authentication Required:** Yes
+
+### Description
+
+This endpoint allows authenticated users to update an existing task.
+
+### Request Parameters
+
+- **task_id**: The ID of the task to be updated.
+
+### Request Body
+
+- **Content Type:** `application/json`
+
+| Field      | Type     | Required | Description              |
+|------------|----------|----------|--------------------------|
+| title      | string   | No       | New title of the task    |
+| body       | string   | No       | New description of the task  |
+| due_date   | string   | No       | New due date of the task |
+| completed  | boolean  | No       | New completion status of the task |
+
+### Request Headers
+
+- **Authorization:** Bearer token
+
+### Response
+
+- **Status Code:** 
+    - 200: Task updated successfully
+    - 400: Task not found
+    - 401: Not authorized to perform this operation
+    - 500: An error occurred
+    
+- **Content Type:** `application/json`
+
+#### Successful Response Example
+
+```json
+{
+    "id": 123,
+    "title": "Updated Task Title",
+    "body": "Updated task description",
+    "due_date": "2024-02-28",
+    "completed": true
+}
+```
+
+### 4. Delete Task
+
+## Delete Task Endpoint
+
+- **URL:** `/tasks/delete_task/<task_id>`
+- **Method:** DELETE
+- **Authentication Required:** Yes
+
+### Description
+
+This endpoint allows authenticated users to delete an existing task.
+
+### Request Parameters
+
+- **task_id**: The ID of the task to be deleted.
+
+### Request Headers
+
+- **Authorization:** Bearer token
+
+### Response
+
+- **Status Code:** 
+    - 200: Task deleted successfully
+    - 400: Task not found
+    - 401: Not authorized to perform this operation
+    - 500: An error occurred
+    
+- **Content Type:** `application/json`
+
+#### Successful Response Example
+
+```json
+{
+    "id": 123
+}
+```
+
