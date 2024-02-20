@@ -20,12 +20,11 @@ class AuthRepository:
     def save_user(user):
         user_create_query = f'''
             INSERT INTO users (firstname, lastname, email, password)
-            VALUES ('{user['first_name']}', '{user['last_name']}', '{user['email']}', '{user['password']}')
+            VALUES ('{user.first_name}', '{user.last_name}', '{user.email}', '{user.password}')
             RETURNING user_id
         '''
         try:
             with db_cursor(True) as cursor:
-                print(cursor)
                 cursor.execute(user_create_query)
                 user_id = cursor.fetchone()[0]
             return user_id
@@ -34,7 +33,7 @@ class AuthRepository:
 
     @staticmethod
     def user_exists(email):
-        user_exists_query = QueryBuilder.build_select_query('users', f"email = {email}")
+        user_exists_query = QueryBuilder.build_select_query('users', f"email = '{email}'")
         try:
             with db_cursor(True) as cursor:
                 cursor.execute(user_exists_query)

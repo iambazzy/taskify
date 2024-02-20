@@ -5,12 +5,11 @@ from contextlib import contextmanager
 db_pool = psycopg2.pool.SimpleConnectionPool(
     1,
     5,
-    user='bazzy',
-    host='127.0.0.1',
-    port='5432',
-    database='ecommerce_store'
+    user='mohammadbasit0404',
+    password='56wTthCzkFEr',
+    host='ep-lucky-grass-a5qopkk1-pooler.us-east-2.aws.neon.tech',
+    database='taskify_db'
 )
-
 
 @contextmanager
 def db_connection():
