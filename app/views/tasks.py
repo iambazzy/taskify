@@ -49,6 +49,8 @@ def update_task(decoded_token, task_id):
         task_repo = TaskRepository()
         user_id = decoded_token['user']['user_id']
         task_in_db = task_repo.fetch_task(task_id)
+        if not task_in_db:
+            return build_response({}, 'Task not found', False), 400
         if user_id != task_in_db['user_id']:
             return build_response({}, 'Not authorized to perform this operation', False), 401
         updated_task_id = task_repo.update_task(task_id, data)
@@ -56,3 +58,20 @@ def update_task(decoded_token, task_id):
         return build_response(updated_task, 'Task updated successfully', True), 200
     except ValidationError as error:
         return build_response(error.messages, 'An error occurred', False), 500
+
+
+@tasks_bp.route('/delete_task/<task_id>', methods=['DELETE'])
+@login_required
+def delete_task(decoded_token, task_id):
+    try:
+        task_repo = TaskRepository()
+        user_id = decoded_token['user']['user_id']
+        task_in_db = task_repo.fetch_task(task_id)
+        if not task_in_db:
+            return build_response({}, 'Task not found', False), 400
+        if user_id != task_in_db['user_id']:
+            return build_response({}, 'Not authorized to perform this operation', False), 401
+        deleted_task_id = task_repo.delete_task(task_id)
+        return build_response({'id': deleted_task_id}, 'Task deleted successfully', True), 200
+    except Exception as e:
+        return build_response(e, 'An error occurred', False), 500

@@ -58,6 +58,8 @@ class TaskRepository:
             with db_cursor() as cursor:
                 cursor.execute(task_fetch_query)
                 task = cursor.fetchone()
+                if not task:
+                    return False
                 return {
                  'id': task[0],
                  'title': task[2],
@@ -84,3 +86,16 @@ class TaskRepository:
                 return updated_task_id
         except Exception as e:
             current_app.logger.info(f"Error occurred during task updation: {e}")
+
+    @staticmethod
+    def delete_task(task_id):
+        task_delete_query = f'''
+            DELETE FROM user_tasks WHERE id = {task_id} RETURNING id
+        '''
+        try:
+            with db_cursor(True) as cursor:
+                cursor.execute(task_delete_query)
+                deleted_task_id = cursor.fetchone()[0]
+                return deleted_task_id
+        except Exception as e:
+            current_app.logger.info(f"Error occurred during task deletion: {e}")
