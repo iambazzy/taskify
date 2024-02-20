@@ -28,7 +28,7 @@ def create_task(decoded_token):
         return build_response(error.messages, 'An error occurred', False), 500
 
 
-@tasks_bp.route('/user_tasks', methods=['GET'])
+@tasks_bp.route('/', methods=['GET'])
 @login_required
 def get_tasks(decoded_token):
     try:
@@ -39,53 +39,20 @@ def get_tasks(decoded_token):
     except Exception as e:
         return build_response(e, 'An error occurred', False), 500
 
-# @tasks_bp.route('/', methods=['GET'])
-# @login_required
-# def get_tasks(decoded_token):
-#     try:
-#         with db_connection_pool.getconn() as conn, conn.cursor() as cursor:
-#             user_id = decoded_token["sub"]["user_id"]
-#             fetch_tasks_query = 'SELECT * FROM user_tasks WHERE user_id = %s'
-#             cursor.execute(fetch_tasks_query, (user_id,))
-#             tasks = cursor.fetchall()
-#             print(tasks, user_id)
-#             tasks = [
-#                 {
-#                     'id': task[0],
-#                     'title': task[2],
-#                     'body': task[3],
-#                     'due_date': task[4],
-#                     'completed': task[5],
-#                     "user_id": user_id
-#                 } for task in tasks
-#             ]
-#             return build_response(tasks, 'Tasks fetched successfully', False), 200
-#     except ValidationError as err:
-#         return build_response(err.messages, 'An error occurred', False), 400
-#     except Exception as e:
-#         if 'conn' in locals():
-#             conn.rollback()
-#         current_app.logger.info(f"Error occurred during registration: {e}")
-#         return build_response(e, 'An error occurred', False), 500
-#     finally:
-#         if 'conn' in locals():
-#             db_connection_pool.putconn(conn)
 
-
-# @tasks_bp.route('/update', methods=['PUT'])
-# @login_required
-# def update_task(decoded_token):
-#     try:
-#         with db_connection_pool.getconn() as conn, conn.cursor() as cursor:
-#             user_id = decoded_token["sub"]["user_id"]
-#                 update_task_query = 'UPDATE '
-#     except ValidationError as err:
-#         return build_response(err.messages, 'An error occurred', False), 400
-#     except Exception as e:
-#         if 'conn' in locals():
-#             conn.rollback()
-#         current_app.logger.info(f"Error occurred during registration: {e}")
-#         return build_response(e, 'An error occurred', False), 500
-#     finally:
-#         if 'conn' in locals():
-#             db_connection_pool.putconn(conn)
+@tasks_bp.route('/update_task/<task_id>', methods=['PUT'])
+@login_required
+def update_task(decoded_token, task_id):
+    schema = TaskSchema()
+    try:
+        data = schema.load(request.get_json())
+        task_repo = TaskRepository()
+        user_id = decoded_token['user']['user_id']
+        task_in_db = task_repo.fetch_task(task_id)
+        if user_id != task_in_db['user_id']:
+            return build_response({}, 'Not authorized to perform this operation', False), 401
+        updated_task_id = task_repo.update_task(task_id, data)
+        updated_task = task_repo.fetch_task(updated_task_id)
+        return build_response(updated_task, 'Task updated successfully', True), 200
+    except ValidationError as error:
+        return build_response(error.messages, 'An error occurred', False), 500
