@@ -50,9 +50,8 @@ class TaskRepository:
 
     @staticmethod
     def fetch_task(task_id):
-        task_fetch_query = f'''
-            SELECT * FROM user_tasks WHERE id = {task_id}
-        '''
+        task_fetch_query = QueryBuilder.build_select_query('user_tasks', f"id = {task_id}")
+
         try:
             with db_cursor() as cursor:
                 cursor.execute(task_fetch_query)
