@@ -11,6 +11,7 @@ db_pool = psycopg2.pool.SimpleConnectionPool(
     database='taskify_db'
 )
 
+
 @contextmanager
 def db_connection():
     connection = db_pool.getconn()
